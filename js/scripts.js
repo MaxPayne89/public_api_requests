@@ -98,8 +98,19 @@ function insertModalHtml(html) {
 }
 
 //Event listeners
+//open modal
 document.querySelector('#gallery').addEventListener('click', (event) => {
-    if(event.target.id === 'card'){
+    console.log(event.target.classList)
+    console.log(event.target)
+    if(event.target.matches('.card')){
         generateModal(event.target)
+    }
+})
+//close modal
+document.querySelector('body').addEventListener('click', (event) => {
+    console.log(event.target)
+    if (event.target.matches('button.modal-close-btn') || event.target.tagName.toLowerCase() === 'strong'){
+        const modal = document.querySelector('div.modal-container');
+        modal.remove();
     }
 })
