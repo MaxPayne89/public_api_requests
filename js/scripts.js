@@ -1,4 +1,5 @@
 const personPromise = fetchData('https://fsjs-public-api-backup.herokuapp.com/api')
+const classArr = ['card', 'card-img-container', 'card-img', 'card-info-container', 'card-name', 'cap', 'card-text'];
 
 //resolve the promise to the gallery html
 personPromise
@@ -74,8 +75,21 @@ function generateModalHtml(person) {
     return html;
 }
 
+const refineElement = (element) => {
+    if(element.tagName.toLowerCase() === 'div'){
+        if(element.classList[0] !== 'card'){
+            return element.parentElement;
+        } else {
+            return element;
+        }
+    }else {
+        return element.parentElement.parentElement;
+    }
+}
+
 function generateModal(element) {
-    const name = element.querySelector('#name').textContent.split(' ');
+    const elementRefined = refineElement(element)
+    const name = elementRefined.querySelector('#name').textContent.split(' ');
     const firstName = name[0];
     const lastName = name[1];
     personPromise
@@ -100,15 +114,25 @@ function insertModalHtml(html) {
 //Event listeners
 //open modal
 document.querySelector('#gallery').addEventListener('click', (event) => {
-    console.log(event.target.classList)
-    console.log(event.target)
+    const elementClassList = Array.from(event.target.classList);
+    elementClassList.filter(element => {
+        if(classArr.includes(element)){
+            return true;
+        } else {
+            return false;
+        }
+    })
+    if(elementClassList.length > 0){
+        generateModal(event.target)
+    }
+    /*
     if(event.target.matches('.card')){
         generateModal(event.target)
     }
+    */
 })
 //close modal
 document.querySelector('body').addEventListener('click', (event) => {
-    console.log(event.target)
     if (event.target.matches('button.modal-close-btn') || event.target.tagName.toLowerCase() === 'strong'){
         const modal = document.querySelector('div.modal-container');
         modal.remove();
