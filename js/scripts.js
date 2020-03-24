@@ -1,3 +1,4 @@
+//data used throughout the app
 const personPromise = fetchData('https://fsjs-public-api-backup.herokuapp.com/api')
 const classArr = ['card', 'card-img-container', 'card-img', 'card-info-container', 'card-name', 'cap', 'card-text'];
 
@@ -20,18 +21,6 @@ async function fetchData(url) {
         throw Error('Something went wrong. Probably a network issue.');
     }
 }
-//for dev purposes
-//fetchData('https://fsjs-public-api-backup.herokuapp.com/api').then(data => console.log(data));
-//actual fetch call
-/*
-fetchData('https://fsjs-public-api-backup.herokuapp.com/api')
-    .then(persons => persons.map((person) => {
-        return generateHTML(person);
-    }).join(''))
-    .then(html => insertHTML(html))
-    .catch(error => console.log('There has been an issue', error));
-    */
-
 
 //helper functions
 function generateHTML(person) {
@@ -76,6 +65,7 @@ function generateModalHtml(person) {
 }
 
 const refineElement = (element) => {
+    //if it is not one of the divs without the card class, one has to go up two levels. Otherwise, just one.
     if(element.tagName.toLowerCase() === 'div'){
         if(element.classList[0] !== 'card'){
             return element.parentElement;
@@ -89,6 +79,7 @@ const refineElement = (element) => {
 
 function generateModal(element) {
     const elementRefined = refineElement(element)
+    //find out which of the random users was clicked via the first and last name.
     const name = elementRefined.querySelector('#name').textContent.split(' ');
     const firstName = name[0];
     const lastName = name[1];
@@ -125,11 +116,6 @@ document.querySelector('#gallery').addEventListener('click', (event) => {
     if(elementClassList.length > 0){
         generateModal(event.target)
     }
-    /*
-    if(event.target.matches('.card')){
-        generateModal(event.target)
-    }
-    */
 })
 //close modal
 document.querySelector('body').addEventListener('click', (event) => {
